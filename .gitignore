@@ -1,0 +1,5 @@
+.venv
+8hr-MARATHON/
+.env
+**/__pycache__
+:memory:.ses
