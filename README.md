@@ -96,6 +96,7 @@ GROQ_FALLBACK_API_KEY = ""          # second Groq key, or same as primary
 
 # Portkey LLM Gateway
 PORTKEY_API_KEY = ""
+PORTKEY_CONFIG_SLUG = ""            # pc-... saved config; required if your Portkey org blocks inline config
 
 # Qdrant Vector DB
 QDRANT_API_KEY = ""

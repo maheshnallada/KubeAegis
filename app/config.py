@@ -7,7 +7,12 @@ class Settings:
     GROQ_API_KEY = os.getenv("GROQ_API_KEY")
     GROQ_FALLBACK_API_KEY = os.getenv("GROQ_FALLBACK_API_KEY")
     GROQ_MODEL = os.getenv("GROQ_MODEL")
+    GROQ_SLUG = os.getenv("GROQ_SLUG")
+    GROQ_SLUG_2 = os.getenv("GROQ_SLUG")
     PORTKEY_API_KEY = os.getenv("PORTKEY_API_KEY")
+    # Saved Portkey dashboard config slug (pc-...). Required when the Portkey org has
+    # block_inline_config enabled, since inline config dicts are then rejected (400).
+    PORTKEY_CONFIG_SLUG = os.getenv("PORTKEY_CONFIG_SLUG")
     QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
     QDRANT_CLUSTER_ENDPOINT = os.getenv("QDRANT_CLUSTER_ENDPOINT")
     QDRANT_URL = os.getenv("QDRANT_URL")

@@ -18,6 +18,7 @@ The project uses a `.env` file for local development. All configuration is manag
 | Variable | Description | Example |
 | :--- | :--- | :--- |
 | `PORTKEY_API_KEY` | API key for Portkey — enables routing, fallback, caching, and observability across all LLM calls | `pk-...` |
+| `PORTKEY_CONFIG_SLUG` | Saved config slug from Portkey Dashboard → Configs. Optional, but **required** if your Portkey org has `block_inline_config` enabled — inline config dicts are then rejected with a 400 `inline_config_blocked` error. When set, it overrides the inline `GATEWAY_CONFIG` in `app/gateway/client.py`. | `pc-ssss-d8a1e4` |
 
 ---
 
