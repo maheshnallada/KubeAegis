@@ -13,6 +13,7 @@ logfire.configure(token=os.getenv("LOGFIRE_TOKEN"))
 import json
 from fastapi import FastAPI, Response
 from fastapi.responses import StreamingResponse
+from fastapi.middleware.cors import CORSMiddleware
 from app.agents.graph import rag_agent
 from app.agents.nodes.planner import planner_node
 from app.agents.nodes.retriever import retrieve_node
@@ -26,6 +27,25 @@ from typing import Optional
 
 # Initialize FastAPI
 app = FastAPI(title="Enterprise Agentic RAG API")
+
+# ── CORS ──────────────────────────────────────────────────────────────────────
+# REPLIT_UI_URL is injected as a Replit Secret on the backend Repl.
+# Falls back to "*" so the app still works during first deploy before the
+# frontend URL is known. Tighten to the exact Replit URL after first deploy.
+_allowed_origins_raw = os.getenv("ALLOWED_ORIGINS", "*")
+_allowed_origins = (
+    [o.strip() for o in _allowed_origins_raw.split(",")]
+    if _allowed_origins_raw != "*"
+    else ["*"]
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=_allowed_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.on_event("startup")
