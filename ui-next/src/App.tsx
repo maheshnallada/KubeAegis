@@ -3,6 +3,7 @@ import LandingPage from './pages/LandingPage'
 import ChatPage from './pages/ChatPage'
 import ArchitecturePage from './pages/ArchitecturePage'
 import TechStackPage from './pages/TechStackPage'
+import ObservabilityPage from './pages/ObservabilityPage'
 import Navbar from './components/Navbar'
 
 export default function App() {
@@ -14,6 +15,7 @@ export default function App() {
         <Route path="/chat" element={<ChatPage />} />
         <Route path="/architecture" element={<ArchitecturePage />} />
         <Route path="/stack" element={<TechStackPage />} />
+        <Route path="/observability" element={<ObservabilityPage />} />
       </Routes>
     </div>
   )

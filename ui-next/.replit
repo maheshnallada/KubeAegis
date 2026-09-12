@@ -1,0 +1,29 @@
+# ──────────────────────────────────────────────────────────────────────────────
+# KubeAegis — Frontend Repl (React + Vite)
+# Import the ui-next/ subfolder as the ROOT of this Repl.
+# ──────────────────────────────────────────────────────────────────────────────
+
+modules = ["nodejs-20"]
+
+[nix]
+channel = "stable-24_05"
+
+[env]
+NODE_ENV = "development"
+
+# Run command — installs deps on first boot, then starts Vite dev server
+run = "npm install && npm run dev -- --host 0.0.0.0 --port 5173"
+
+# ── Port mapping ───────────────────────────────────────────────────────────────
+[[ports]]
+localPort    = 5173
+externalPort = 80
+
+# ── Deployment (Replit Autoscale / Reserved VM) ────────────────────────────────
+# Builds a production bundle and serves it with a static file server.
+[deployment]
+build = ["npm", "run", "build"]
+run   = ["npx", "--yes", "serve", "dist", "-p", "5173", "-s"]
+
+# ── Secrets to add in Replit sidebar (Secrets tab) ────────────────────────────
+# VITE_BACKEND_URL = https://<your-api-repl>.replit.app

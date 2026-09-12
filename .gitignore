@@ -1,6 +1,17 @@
+# Python
 .venv
-8hr-MARATHON
-.env
 **/__pycache__
 :memory:.ses
+
+# Local secrets — never commit
+.env
+ui-next/.env.local
+
+# Editor / IDE
 .vscode/
+
+# Subproject kept outside main repo
+8hr-MARATHON
+
+# Replit files ARE committed so both Repls pick up the correct run config.
+# Do NOT add .replit or ui-next/.replit here.

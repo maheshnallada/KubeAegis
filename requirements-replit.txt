@@ -1,0 +1,48 @@
+# ==============================================================================
+# REPLIT BACKEND — stripped of heavy/dev-only packages that are not needed at
+# runtime and would either bust the 512 MB RAM limit or take 10+ min to install.
+#
+# Removed vs requirements.txt:
+#   streamlit          — replaced by the ui-next React Repl
+#   nest-asyncio       — only needed by the old Streamlit eval runner
+#   unstructured       — heavy system deps (libmagic, poppler); not used at query time
+#   sentence-transformers / torch — flashrank bundles its own ONNX weights
+#   ragas / deepeval / langfuse   — eval-only; run locally, not in prod
+#   langchain-google-genai        — embeddings only used during ingestion
+#   google-generativeai           — same
+#   pdfplumber / pypdf / python-pptx / python-docx / beautifulsoup4
+#                                 — ingestion parsers; not needed at query time
+# ==============================================================================
+
+# --- CORE API & WEB FRAMEWORK ---
+fastapi
+uvicorn[standard]
+python-dotenv
+requests
+numpy
+pytz
+
+# --- VECTOR DB & RETRIEVAL ---
+qdrant-client
+flashrank
+
+# --- LANGCHAIN & AGENTIC ORCHESTRATION ---
+langchain
+langgraph
+langchain-groq
+langchain-google-vertexai   # required shim for NeMo Guardrails internal import
+langchain-community
+langchain-openai
+pydantic>=2.0.0
+
+# --- GUARDRAILS ---
+nemoguardrails
+langchain-nvidia-ai-endpoints
+
+# --- LLM GATEWAY ---
+portkey-ai
+
+# --- OBSERVABILITY ---
+langsmith
+logfire[fastapi,requests]
+loguru

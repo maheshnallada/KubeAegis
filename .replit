@@ -1,0 +1,42 @@
+# ──────────────────────────────────────────────────────────────────────────────
+# KubeAegis — Backend Repl (FastAPI)
+# Import THIS repo root into Replit when creating the backend Repl.
+# ──────────────────────────────────────────────────────────────────────────────
+
+modules = ["python-3.11"]
+
+[nix]
+channel = "stable-24_05"
+
+# Install Python deps from the lean replit requirements file
+[env]
+PYTHONUNBUFFERED = "1"
+
+# Run command — Replit "Run" button executes this
+run = "pip install -r requirements-replit.txt --quiet && uvicorn app.main:app --host 0.0.0.0 --port 8080"
+
+# ── Port mapping ───────────────────────────────────────────────────────────────
+[[ports]]
+localPort  = 8080
+externalPort = 80
+
+# ── Deployment (Replit Autoscale / Reserved VM) ────────────────────────────────
+[deployment]
+run = ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port 8080"]
+
+# ── Secrets to add in Replit sidebar (Secrets tab) ────────────────────────────
+# GROQ_API_KEY
+# GROQ_FALLBACK_API_KEY
+# PORTKEY_API_KEY
+# PORTKEY_CONFIG_SLUG
+# GEMINI_API_KEY
+# QDRANT_API_KEY
+# QDRANT_CLUSTER_ENDPOINT
+# QDRANT_URL
+# QDRANT_COLLECTION
+# LOGFIRE_TOKEN
+# LANGSMITH_API_KEY
+# LANGSMITH_PROJECT
+# LANGSMITH_ENDPOINT      = https://api.smith.langchain.com
+# LANGSMITH_TRACING       = true
+# ALLOWED_ORIGINS         = https://<your-ui-repl>.replit.app,http://localhost:5173

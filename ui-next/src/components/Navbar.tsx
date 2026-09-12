@@ -5,6 +5,7 @@ const LINKS = [
   { to: '/', label: 'Overview' },
   { to: '/architecture', label: 'Architecture' },
   { to: '/stack', label: 'Tech Stack' },
+  { to: '/observability', label: 'Observability' },
   { to: '/chat', label: 'Live Demo' },
 ]
 
