@@ -17,7 +17,7 @@ By using a **Planner-Retriever-Responder** architecture, we ensure that technica
 ```mermaid
 sequenceDiagram
     participant User
-    participant UI as Streamlit UI
+    participant UI as React UI (Vite)
     participant Agent as Agent Brain (FastAPI)
     participant Data as Knowledge Base (Qdrant)
 
@@ -38,7 +38,7 @@ sequenceDiagram
 
 ## 📂 Project Organization
 *   **`app/`**: The core Python package containing the Agent, Pipelines, and Services.
-*   **`ui/`**: A premium Streamlit interface designed for source transparency.
+*   **`ui-next/`**: A React + Vite interface designed for source transparency, with multi-page routing (Chat, Architecture, Tech Stack).
 *   **`DATA/`**: The ground-truth documentation used for ingestion.
 *   **`DOCS/`**: This documentation suite.
 *   **`commands.md`**: The master execution guide for developers.

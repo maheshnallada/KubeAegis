@@ -95,7 +95,7 @@ flowchart TD
     K --> L[Exp 5: Answer Correctness\nbatch 1 → 45s → batch 2 + 60s]
     L --> M[Exp 6: Tool Correctness\nno LLM — instant ⚡]
 
-    M --> N[📊 Streamlit Dashboard\nScores + Summary]
+    M --> N[📊 React UI Dashboard\nScores + Summary]
     F --> N
 ```
 
@@ -245,9 +245,9 @@ After processing all 15 samples, a full **62s cooldown** resets the window compl
 We use `asyncio.sleep` (not `time.sleep`) for the cooldowns in `metrics.py`:
 
 - `time.sleep` freezes the entire Python thread — no UI updates, no progress callbacks
-- `asyncio.sleep` yields control back to the event loop — the Streamlit status callback can still fire dots while waiting
+- `asyncio.sleep` yields control back to the event loop — progress state can still update while waiting
 
-The Streamlit app uses `nest_asyncio.apply()` to allow async code to run from within Streamlit's synchronous context.
+The eval pipeline uses `nest_asyncio.apply()` to allow async code to run from within a synchronous context when invoked from the API layer.
 
 ### Total Runtime
 
@@ -267,11 +267,11 @@ The Streamlit app uses `nest_asyncio.apply()` to allow async code to run from wi
 # Terminal 1 — start the FastAPI backend
 uvicorn app.main:app --reload --port 8000
 
-# Terminal 2 — start the Streamlit eval app
-streamlit run evals/app.py
+# Terminal 2 — start the React UI (eval pipeline accessible via the Evals page)
+cd ui-next && npm run dev
 ```
 
-Then open `http://localhost:8501` and follow the 3 tabs:
+Then open `http://localhost:5173` and navigate to the **Evals** section:
 1. **Ground Truth** — review the 15 golden Q&A pairs and 6 guardrails tests
 2. **Live Pipeline** — click "Run Live Pipeline" to collect real responses
 3. **Eval Metrics** — click "Run Eval Metrics" to score with RAGAS (takes ~50 min on free tier)

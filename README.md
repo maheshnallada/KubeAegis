@@ -11,7 +11,7 @@ A production-grade, enterprise-level RAG system built with **LangGraph**, **Port
 - **Gemini Embeddings**: Google `gemini-embedding-2-preview` (3072-dim) via `langchain-google-genai`.
 - **Local Document Parsing**: PDF, HTML, TXT, DOCX, PPTX parsed entirely on-device — no external OCR service.
 - **Observability**: Full trace nesting with **Pydantic Logfire** and **LangSmith** across every agent node.
-- **Evaluation Suite**: RAGAS-powered eval pipeline (6 metrics) with a dedicated Streamlit demo app.
+- **Evaluation Suite**: RAGAS-powered eval pipeline (6 metrics) with a dedicated React eval interface.
 
 ---
 
@@ -19,7 +19,7 @@ A production-grade, enterprise-level RAG system built with **LangGraph**, **Port
 
 ```mermaid
 graph TD
-    User((User)) --> UI[Streamlit UI]
+    User((User)) --> UI[React UI]
     UI --> API[FastAPI /query]
     API --> Guard{NeMo Guardrails}
     Guard -->|Blocked| UI
@@ -29,6 +29,9 @@ graph TD
     Retriever --> Reranker[FlashRank Local Reranker]
     Reranker --> Responder
     Responder --> UI
+
+    classDef ui fill:#2563EB,stroke:#1E40AF,color:#fff
+    class UI ui
     Responder -.-> Memory[(LangGraph MemorySaver)]
 ```
 
@@ -49,8 +52,8 @@ graph TD
 │   │   └── retrieval/   # Gemini embeddings + Qdrant search + FlashRank reranking
 │   ├── config.py        # Centralized environment variable management
 │   └── main.py          # FastAPI entrypoint — guardrails gate + /query endpoint
-├── evals/               # RAGAS evaluation suite + Streamlit 3-tab demo
-├── ui/                  # Streamlit chat interface with reasoning step transparency
+├── evals/               # RAGAS evaluation suite + React eval interface (3-tab: Ground Truth / Live Pipeline / Metrics)
+├── ui-next/             # React + Vite chat interface with reasoning step transparency
 ├── processed_data/      # Auto-generated — parsed & chunked JSON output per document
 ├── docs/                # Architectural and operational guides (11 docs)
 ├── DATA/                # Sample datasets (True vs Noisy documentation)
@@ -63,7 +66,7 @@ graph TD
 
 | Layer | Technology |
 |-------|-----------|
-| Orchestration | LangChain + LangGraph |
+| UI | React + Vite + TypeScript |
 | LLMs | Groq (Llama 3.3 70B) via **Portkey** gateway |
 | Guardrails | NeMo Guardrails |
 | Vector DB | Qdrant Cloud |
@@ -111,7 +114,7 @@ LANGSMITH_ENDPOINT = https://api.smith.langchain.com
 LANGSMITH_API_KEY = ""
 LANGSMITH_PROJECT = ""
 
-# Streamlit UI → FastAPI
+# React UI → FastAPI
 BACKEND_URL = ""                    # e.g. http://localhost:8000
 
 # Eval judge LLM (keep separate from main key to avoid rate-limiting the live app)
@@ -137,15 +140,16 @@ python -m app.ingestion.processor DATA --wipe
 # Terminal 1 — FastAPI backend
 uvicorn app.main:app --reload --port 8000
 
-# Terminal 2 — Streamlit UI
-streamlit run ui/app.py
+# Terminal 2 — React UI (Vite dev server)
+cd ui-next && npm run dev
 ```
 
 ### 5. Run the eval suite (optional)
 
 ```powershell
 # Requires the FastAPI backend running on :8000
-streamlit run evals/app.py
+cd ui-next && npm run dev
+# then navigate to http://localhost:5173 and open the Evals section
 ```
 
 ---
@@ -164,7 +168,7 @@ streamlit run evals/app.py
 | 08 | [Guardrails](docs/08_GUARDRAILS.md) | NeMo Guardrails implementation |
 | 09 | [LLM Gateway](docs/09_LLM_GATEWAY.md) | Portkey routing, fallback, and observability |
 | 10 | [Evals](docs/10_EVALS.md) | RAGAS metrics theory and token budget |
-| 11 | [Evals Pipeline](docs/11_EVALS_PIPELINE.md) | Live eval pipeline and Streamlit demo |
+| 11 | [Evals Pipeline](docs/11_EVALS_PIPELINE.md) | Live eval pipeline and React eval interface |
 
 ---
 

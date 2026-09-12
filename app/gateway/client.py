@@ -18,7 +18,7 @@ GATEWAY_CONFIG = {
     },
     "targets": [
         {"override_params": {"model": f"@{settings.GROQ_SLUG}/openai/gpt-oss-120b"}},
-        {"override_params": {"model": f"@{settings.GROQ_SLUG_2}/llama-3.1-8b-instant"}},
+        {"override_params": {"model": f"@{settings.GROQ_SLUG_2}/openai/gpt-oss-20b"}},
     ]
 }
 

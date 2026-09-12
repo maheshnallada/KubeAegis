@@ -24,7 +24,7 @@ LangSmith is specialized for the "Agentic" part of the project. It records:
 ## 📊 Tracing Architecture
 ```mermaid
 graph TD
-    UI[Streamlit UI] -->|Trace ID| Backend[FastAPI Backend]
+    UI[React UI (Vite)] -->|Trace ID| Backend[FastAPI Backend]
     Backend -->|Span| Logfire{Logfire}
     Backend -->|Trace| LangSmith{LangSmith}
     Backend -->|Query| Qdrant[(Qdrant)]

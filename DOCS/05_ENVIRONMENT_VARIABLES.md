@@ -63,7 +63,7 @@ The project uses a `.env` file for local development. All configuration is manag
 
 | Variable | Description | Example |
 | :--- | :--- | :--- |
-| `BACKEND_URL` | URL the Streamlit UI uses to reach the FastAPI backend | `http://localhost:8000` |
+| `BACKEND_URL` | URL the React UI uses to reach the FastAPI backend | `http://localhost:8000` |
 
 ---
 

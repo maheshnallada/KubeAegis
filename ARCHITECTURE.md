@@ -6,8 +6,8 @@ graph LR
     %% ── Interfaces ───────────────────────────────────────────────────────────
     subgraph UI ["🖥️  Interface Layer"]
         direction TB
-        CHAT["Streamlit\nChat UI"]
-        EVAL_UI["Streamlit\nEval App"]
+        CHAT["React\nChat UI"]
+        EVAL_UI["React\nEval App"]
     end
 
     %% ── API + Safety ─────────────────────────────────────────────────────────
@@ -128,8 +128,8 @@ graph TB
 
     subgraph UI ["1. User Interface"]
         direction LR
-        CHAT["Streamlit Chat UI"]
-        EAPP["Streamlit Eval App"]
+        CHAT["React Chat UI"]
+        EAPP["React Eval App"]
     end
 
     subgraph SAFETY ["2. API + Safety Gate"]
@@ -234,7 +234,7 @@ graph TB
 
 ```mermaid
 graph TB
-    A["🖥️ 1. Streamlit UI\nChat + Eval App"]
+    A["🖥️ 1. React UI (Vite)\nChat + Eval App"]
     B["⚡ 2. FastAPI + 🛡️ NeMo Guardrails"]
     C["🧠 3. LangGraph Agent\nPlanner → Retriever → Responder"]
     D["🗄️ 4. Qdrant Cloud\n+ FlashRank Reranker"]
