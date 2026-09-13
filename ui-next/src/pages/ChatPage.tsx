@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { v4 as uid } from 'uuid'
+import { PanelLeft } from 'lucide-react'
 import Sidebar from '../components/Sidebar'
 import ChatMessage from '../components/ChatMessage'
 import ChatInput from '../components/ChatInput'
@@ -30,6 +31,7 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>(() => loadMessages(activeId))
   const [loading, setLoading] = useState(false)
   const [backendOnline, setBackendOnline] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
   const bottomRef = useRef<HTMLDivElement>(null)
   const abortRef = useRef<AbortController | null>(null)
 
@@ -43,8 +45,17 @@ export default function ChatPage() {
   useEffect(() => { saveSessions(sessions) }, [sessions])
   useEffect(() => { saveMessages(activeId, messages) }, [messages, activeId])
 
+  // Lock body scroll when mobile sidebar is open
+  useEffect(() => {
+    document.body.style.overflow = sidebarOpen ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [sidebarOpen])
+
   const switchSession = useCallback((id: string) => {
-    setActiveId(id); setMessages(loadMessages(id)); setLoading(false)
+    setActiveId(id)
+    setMessages(loadMessages(id))
+    setLoading(false)
+    setSidebarOpen(false) // close drawer on selection
   }, [])
 
   const newSession = useCallback(() => {
@@ -69,7 +80,6 @@ export default function ChatPage() {
   }, [activeId, sessions])
 
   const handleSend = async (content: string) => {
-    // Cancel any in-flight stream
     abortRef.current?.abort()
     const controller = new AbortController()
     abortRef.current = controller
@@ -91,9 +101,7 @@ export default function ChatPage() {
       await queryRAGStream(content, activeId, {
         onToken: (token) => {
           setMessages((p) => p.map((m) =>
-            m.id === assistantId
-              ? { ...m, isLoading: false, content: m.content + token }
-              : m
+            m.id === assistantId ? { ...m, isLoading: false, content: m.content + token } : m
           ))
         },
         onMetadata: (meta) => {
@@ -105,9 +113,7 @@ export default function ChatPage() {
         },
         onError: (err) => {
           setMessages((p) => p.map((m) =>
-            m.id === assistantId
-              ? { ...m, isLoading: false, content: `**Error:** ${err}` }
-              : m
+            m.id === assistantId ? { ...m, isLoading: false, content: `**Error:** ${err}` } : m
           ))
         },
       }, controller.signal)
@@ -127,6 +133,7 @@ export default function ChatPage() {
 
   return (
     <div className="flex h-[calc(100vh-56px)] overflow-hidden">
+      {/* ── Sidebar: always visible on desktop, drawer on mobile ── */}
       <Sidebar
         sessions={sessions}
         activeSessionId={activeId}
@@ -134,32 +141,58 @@ export default function ChatPage() {
         onSelectSession={switchSession}
         onDeleteSession={deleteSession}
         backendOnline={backendOnline}
+        mobileOpen={sidebarOpen}
+        onMobileClose={() => setSidebarOpen(false)}
       />
+
+      {/* ── Mobile overlay ── */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 z-20 bg-black/60 backdrop-blur-sm md:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      {/* ── Main chat area ── */}
       <div className="flex flex-col flex-1 min-w-0">
         {/* Header */}
-        <header className="flex items-center justify-between px-6 py-3.5 border-b border-[#2a2a3a] bg-[#0a0a0f] shrink-0">
-          <div>
-            <h1 className="text-sm font-semibold text-[#f1f1f5]">{activeLabel}</h1>
-            <p className="text-[11px] text-[#5a5a72] mt-0.5">Kubernetes · Intel · Networking</p>
+        <header className="flex items-center justify-between px-4 sm:px-6 py-3.5 border-b border-[#2a2a3a] bg-[#0a0a0f] shrink-0">
+          <div className="flex items-center gap-3 min-w-0">
+            {/* Sidebar toggle — mobile only */}
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="md:hidden flex items-center justify-center w-8 h-8 rounded-lg border border-[#2a2a3a]
+                text-[#8b8ba7] hover:text-[#f1f1f5] hover:bg-[#1a1a24] transition-all duration-150 shrink-0"
+              aria-label="Open conversations"
+            >
+              <PanelLeft size={15} />
+            </button>
+            <div className="min-w-0">
+              <h1 className="text-sm font-semibold text-[#f1f1f5] truncate">{activeLabel}</h1>
+              <p className="text-[11px] text-[#5a5a72] mt-0.5 hidden sm:block">Kubernetes · Intel · Networking</p>
+            </div>
           </div>
-          <span className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono border
+          <span className={`shrink-0 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono border
             ${backendOnline ? 'bg-green-500/10 border-green-500/20 text-green-400' : 'bg-red-500/10 border-red-500/20 text-red-400'}`}>
             <span className={`w-1.5 h-1.5 rounded-full ${backendOnline ? 'bg-green-400 animate-pulse' : 'bg-red-400'}`} />
-            {backendOnline ? 'API Online' : 'API Offline'}
+            <span className="hidden sm:inline">{backendOnline ? 'API Online' : 'API Offline'}</span>
+            <span className="sm:hidden">{backendOnline ? 'On' : 'Off'}</span>
           </span>
         </header>
+
         {/* Messages */}
         <div className="flex-1 overflow-y-auto">
           {messages.length === 0
             ? <EmptyState onSuggestion={handleSend} />
             : (
-              <div className="max-w-3xl mx-auto px-6 py-6 space-y-6">
+              <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 space-y-6">
                 {messages.map((m) => <ChatMessage key={m.id} message={m} />)}
                 <div ref={bottomRef} />
               </div>
             )
           }
         </div>
+
         <ChatInput onSend={handleSend} loading={loading} disabled={!backendOnline && messages.length === 0} />
       </div>
     </div>
@@ -174,17 +207,17 @@ function EmptyState({ onSuggestion }: { onSuggestion: (s: string) => void }) {
     { title: 'Enterprise Ops', desc: 'Security, observability, multi-tenancy, RBAC', q: 'What are best practices for Kubernetes RBAC?' },
   ]
   return (
-    <div className="flex flex-col items-center justify-center h-full px-6 py-12">
+    <div className="flex flex-col items-center justify-center h-full px-4 sm:px-6 py-12">
       <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-indigo-500/15 border border-indigo-500/25 mb-6">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" className="text-indigo-400">
           <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </div>
       <h2 className="text-xl font-semibold text-[#f1f1f5] mb-2">KubeAegis RAG</h2>
-      <p className="text-sm text-[#5a5a72] text-center max-w-sm mb-10">
+      <p className="text-sm text-[#5a5a72] text-center max-w-sm mb-8">
         Enterprise knowledge base for Kubernetes, Intel hardware, and networking.
       </p>
-      <div className="grid grid-cols-2 gap-3 w-full max-w-xl">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-xl">
         {cards.map((c) => (
           <button key={c.title} onClick={() => onSuggestion(c.q)}
             className="text-left px-4 py-3.5 rounded-xl border border-[#2a2a3a] bg-[#111118]

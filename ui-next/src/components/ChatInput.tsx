@@ -41,17 +41,20 @@ export default function ChatInput({ onSend, disabled, loading }: Props) {
   }
 
   return (
-    <div className="px-4 py-4 border-t border-[#2a2a3a] bg-[#0a0a0f]">
-      {/* Suggestions (only when empty) */}
+    <div className="px-3 sm:px-4 py-3 sm:py-4 border-t border-[#2a2a3a] bg-[#0a0a0f] shrink-0">
+
+      {/* Suggestion chips — horizontal scroll on mobile, wrap on desktop */}
       {!value && !loading && (
-        <div className="flex flex-wrap gap-2 mb-3">
+        <div className="flex gap-2 mb-3 overflow-x-auto pb-1 scrollbar-none
+          sm:flex-wrap sm:overflow-x-visible sm:pb-0">
           {SUGGESTIONS.map((s) => (
             <button
               key={s}
               onClick={() => setValue(s)}
-              className="px-2.5 py-1 rounded-full text-[11px] text-[#5a5a72] border border-[#2a2a3a]
-                hover:border-indigo-500/40 hover:text-indigo-400 hover:bg-indigo-500/5
-                transition-all duration-150 cursor-pointer"
+              className="shrink-0 px-2.5 py-1 rounded-full text-[11px] text-[#5a5a72]
+                border border-[#2a2a3a] hover:border-indigo-500/40 hover:text-indigo-400
+                hover:bg-indigo-500/5 transition-all duration-150 cursor-pointer
+                whitespace-nowrap"
             >
               {s}
             </button>
@@ -59,8 +62,13 @@ export default function ChatInput({ onSend, disabled, loading }: Props) {
         </div>
       )}
 
-      <div className={`flex items-end gap-3 rounded-xl border px-4 py-3 transition-colors duration-150
-        ${disabled ? 'border-[#2a2a3a] opacity-50' : 'border-[#2a2a3a] focus-within:border-indigo-500/50 bg-[#111118]'}`}>
+      {/* Input row */}
+      <div className={`flex items-end gap-2 sm:gap-3 rounded-xl border px-3 sm:px-4 py-2.5 sm:py-3
+        transition-colors duration-150
+        ${disabled
+          ? 'border-[#2a2a3a] opacity-50'
+          : 'border-[#2a2a3a] focus-within:border-indigo-500/50 bg-[#111118]'
+        }`}>
         <textarea
           ref={textareaRef}
           value={value}
@@ -70,15 +78,18 @@ export default function ChatInput({ onSend, disabled, loading }: Props) {
           placeholder="Ask about Kubernetes, Intel hardware, networking…"
           rows={1}
           className="flex-1 bg-transparent text-sm text-[#f1f1f5] placeholder-[#5a5a72]
-            resize-none outline-none leading-relaxed min-h-[24px]"
+            resize-none outline-none leading-relaxed min-h-[24px] w-full"
         />
         <button
           onClick={submit}
           disabled={!value.trim() || disabled || loading}
-          className={`shrink-0 flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-150 cursor-pointer
+          className={`shrink-0 flex items-center justify-center w-8 h-8 rounded-lg
+            transition-all duration-150 cursor-pointer
             ${value.trim() && !disabled && !loading
               ? 'bg-indigo-600 hover:bg-indigo-500 text-white'
-              : 'bg-[#2a2a3a] text-[#5a5a72] cursor-not-allowed'}`}
+              : 'bg-[#2a2a3a] text-[#5a5a72] cursor-not-allowed'
+            }`}
+          aria-label="Send message"
         >
           {loading ? <Square size={13} /> : <Send size={13} />}
         </button>

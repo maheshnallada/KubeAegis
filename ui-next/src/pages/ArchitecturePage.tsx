@@ -4,22 +4,23 @@ import { ArrowRight, Database, Shield, GitBranch, Zap, BarChart3, Server } from 
 export default function ArchitecturePage() {
   return (
     <main className="pt-14">
-      <div className="max-w-5xl mx-auto px-6 py-16">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+
         {/* Header */}
-        <div className="mb-14">
+        <div className="mb-10 sm:mb-14">
           <span className="inline-block px-3 py-1 rounded-full border border-indigo-500/25 bg-indigo-500/10
             text-indigo-300 text-[11px] font-mono uppercase tracking-wider mb-4">
             System Architecture
           </span>
-          <h1 className="text-4xl font-bold text-[#f1f1f5] mb-3">How it's built</h1>
-          <p className="text-[#5a5a72] text-base leading-relaxed max-w-2xl">
+          <h1 className="text-3xl sm:text-4xl font-bold text-[#f1f1f5] mb-3">How it's built</h1>
+          <p className="text-[#5a5a72] text-sm sm:text-base leading-relaxed max-w-2xl">
             A layered system where each component has a single responsibility.
             No spaghetti — every service, gateway, and node is independently testable and replaceable.
           </p>
         </div>
 
         {/* Layer diagram */}
-        <div className="space-y-3 mb-16">
+        <div className="space-y-3 mb-12 sm:mb-16">
           <LayerRow
             icon={<Server size={15} className="text-blue-400" />}
             label="Interface Layer"
@@ -64,25 +65,28 @@ export default function ArchitecturePage() {
         </div>
 
         {/* Design decisions */}
-        <h2 className="text-xl font-bold text-[#f1f1f5] mb-6">Key design decisions</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-16">
+        <h2 className="text-xl font-bold text-[#f1f1f5] mb-5 sm:mb-6">Key design decisions</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-12 sm:mb-16">
           {DECISIONS.map((d) => (
             <DecisionCard key={d.q} question={d.q} answer={d.a} />
           ))}
         </div>
 
         {/* Data flow */}
-        <h2 className="text-xl font-bold text-[#f1f1f5] mb-6">Data ingestion pipeline</h2>
-        <div className="p-6 rounded-2xl border border-[#2a2a3a] bg-[#0d0d14] mb-12">
-          <div className="flex items-center gap-3 flex-wrap">
-            {['Raw Documents', '→', 'Local Parsing', '→', 'Paragraph Chunks', '→', 'Gemini Embed', '→', 'Qdrant Upsert', '→', 'JSON Cache'].map((t, i) => (
-              t === '→' ? (
-                <span key={i} className="text-[#2a2a3a] text-sm font-mono">→</span>
-              ) : (
-                <span key={i} className="px-3 py-1.5 rounded-lg bg-[#1a1a24] border border-[#2a2a3a]
-                  text-[12px] font-mono text-[#8b8ba7]">{t}</span>
-              )
-            ))}
+        <h2 className="text-xl font-bold text-[#f1f1f5] mb-5 sm:mb-6">Data ingestion pipeline</h2>
+        <div className="p-4 sm:p-6 rounded-2xl border border-[#2a2a3a] bg-[#0d0d14] mb-10 sm:mb-12">
+          {/* Horizontally scrollable on mobile */}
+          <div className="overflow-x-auto -mx-1 px-1">
+            <div className="flex items-center gap-2 sm:gap-3 flex-nowrap w-max sm:w-auto sm:flex-wrap">
+              {['Raw Documents', '→', 'Local Parsing', '→', 'Paragraph Chunks', '→', 'Gemini Embed', '→', 'Qdrant Upsert', '→', 'JSON Cache'].map((t, i) => (
+                t === '→' ? (
+                  <span key={i} className="text-[#2a2a3a] text-sm font-mono shrink-0">→</span>
+                ) : (
+                  <span key={i} className="shrink-0 px-3 py-1.5 rounded-lg bg-[#1a1a24] border border-[#2a2a3a]
+                    text-[12px] font-mono text-[#8b8ba7]">{t}</span>
+                )
+              ))}
+            </div>
           </div>
           <p className="text-[12px] text-[#5a5a72] mt-4 leading-relaxed">
             Supports PDF (pypdf), HTML (BeautifulSoup), DOCX (python-docx), PPTX (python-pptx), TXT.
@@ -119,11 +123,13 @@ function LayerRow({ icon, label, color, items }: {
   icon: React.ReactNode; label: string; color: string; items: string[]
 }) {
   return (
-    <div className={`flex items-start gap-4 p-4 rounded-xl border ${color}`}>
-      <div className="flex items-center gap-2 w-40 shrink-0 pt-0.5">
+    <div className={`flex flex-col sm:flex-row sm:items-start gap-3 p-4 rounded-xl border ${color}`}>
+      {/* Label row — icon + text, full width on mobile */}
+      <div className="flex items-center gap-2 sm:w-40 sm:shrink-0 sm:pt-0.5">
         {icon}
         <span className="text-[11px] font-mono text-[#8b8ba7] uppercase tracking-wider">{label}</span>
       </div>
+      {/* Chips — wrap freely */}
       <div className="flex flex-wrap gap-2">
         {items.map((item) => (
           <span key={item} className="px-2.5 py-1 rounded-lg bg-[#0a0a0f] border border-[#2a2a3a]
@@ -136,7 +142,7 @@ function LayerRow({ icon, label, color, items }: {
 
 function DecisionCard({ question, answer }: { question: string; answer: string }) {
   return (
-    <div className="p-5 rounded-xl border border-[#2a2a3a] bg-[#0d0d14]">
+    <div className="p-4 sm:p-5 rounded-xl border border-[#2a2a3a] bg-[#0d0d14]">
       <p className="text-sm font-semibold text-indigo-300 mb-2">{question}</p>
       <p className="text-[12px] text-[#5a5a72] leading-relaxed">{answer}</p>
     </div>

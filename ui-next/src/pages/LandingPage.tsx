@@ -20,20 +20,20 @@ export default function LandingPage() {
 /* ─── Hero ─────────────────────────────────────────────────────────────── */
 function HeroSection() {
   return (
-    <section className="relative flex flex-col items-center justify-center min-h-[88vh] px-6 text-center overflow-hidden">
+    <section className="relative flex flex-col items-center justify-center min-h-[88vh] px-4 sm:px-6 text-center overflow-hidden">
       {/* Grid background */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(99,102,241,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(99,102,241,0.03)_1px,transparent_1px)] bg-[size:48px_48px]" />
       {/* Glow */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-indigo-600/10 rounded-full blur-[100px] pointer-events-none" />
 
-      <div className="relative z-10 max-w-4xl mx-auto">
+      <div className="relative z-10 max-w-4xl mx-auto w-full">
         {/* Badge */}
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-indigo-500/25 bg-indigo-500/10 text-indigo-300 text-xs font-medium mb-8">
           <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
           Production-grade · Agentic RAG System
         </div>
 
-        <h1 className="text-5xl sm:text-6xl font-bold text-[#f1f1f5] leading-tight tracking-tight mb-6">
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#f1f1f5] leading-tight tracking-tight mb-6">
           Enterprise Knowledge
           <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-indigo-300">
@@ -41,44 +41,47 @@ function HeroSection() {
           </span>
         </h1>
 
-        <p className="text-lg text-[#8b8ba7] max-w-2xl mx-auto leading-relaxed mb-10">
+        <p className="text-base sm:text-lg text-[#8b8ba7] max-w-2xl mx-auto leading-relaxed mb-10">
           A full-stack agentic RAG pipeline with LangGraph orchestration, NeMo Guardrails,
           Portkey LLM Gateway, Qdrant vector search, and FlashRank reranking — built to answer
           Kubernetes, Intel, and Networking questions at enterprise scale.
         </p>
 
-        <div className="flex items-center justify-center gap-4 flex-wrap">
+        <div className="flex items-center justify-center gap-3 flex-wrap">
           <Link
             to="/chat"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500
-              text-white text-sm font-semibold transition-all duration-150 no-underline shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/30"
+            className="inline-flex items-center gap-2 px-5 sm:px-6 py-3 rounded-xl bg-indigo-600
+              hover:bg-indigo-500 text-white text-sm font-semibold transition-all duration-150
+              no-underline shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/30"
           >
             Try Live Demo
             <ArrowRight size={15} />
           </Link>
           <Link
             to="/architecture"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-[#2a2a3a] bg-[#111118]
-              hover:border-indigo-500/30 hover:bg-indigo-500/5 text-[#f1f1f5] text-sm font-medium
-              transition-all duration-150 no-underline"
+            className="inline-flex items-center gap-2 px-5 sm:px-6 py-3 rounded-xl border border-[#2a2a3a]
+              bg-[#111118] hover:border-indigo-500/30 hover:bg-indigo-500/5 text-[#f1f1f5]
+              text-sm font-medium transition-all duration-150 no-underline"
           >
             View Architecture
             <ChevronRight size={15} className="text-[#5a5a72]" />
           </Link>
         </div>
 
-        {/* Mini pipeline preview */}
-        <div className="mt-16 flex items-center justify-center gap-2 flex-wrap">
-          {['User Query', '→', 'Guardrails', '→', 'Planner', '→', 'Retriever', '→', 'Reranker', '→', 'Responder'].map((item, i) => (
-            item === '→' ? (
-              <span key={i} className="text-[#2a2a3a] text-lg">→</span>
-            ) : (
-              <span key={i} className="px-3 py-1.5 rounded-lg bg-[#111118] border border-[#2a2a3a]
-                text-[11px] font-mono text-[#8b8ba7]">
-                {item}
-              </span>
-            )
-          ))}
+        {/* Pipeline preview — horizontally scrollable on mobile */}
+        <div className="mt-14 sm:mt-16 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0">
+          <div className="flex items-center justify-start sm:justify-center gap-2 w-max sm:w-auto mx-auto">
+            {['User Query', '→', 'Guardrails', '→', 'Planner', '→', 'Retriever', '→', 'Reranker', '→', 'Responder'].map((item, i) => (
+              item === '→' ? (
+                <span key={i} className="text-[#2a2a3a] text-lg shrink-0">→</span>
+              ) : (
+                <span key={i} className="shrink-0 px-3 py-1.5 rounded-lg bg-[#111118] border border-[#2a2a3a]
+                  text-[11px] font-mono text-[#8b8ba7]">
+                  {item}
+                </span>
+              )
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -97,10 +100,12 @@ function StatsBar() {
   ]
   return (
     <div className="border-y border-[#2a2a3a] bg-[#0d0d14]">
-      <div className="max-w-6xl mx-auto px-6 py-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 divide-x divide-[#2a2a3a]">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6
+        grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6
+        sm:divide-x sm:divide-[#2a2a3a]">
         {stats.map((s) => (
           <div key={s.label} className="text-center px-2">
-            <p className="text-lg font-bold text-indigo-300 font-mono">{s.value}</p>
+            <p className="text-base sm:text-lg font-bold text-indigo-300 font-mono">{s.value}</p>
             <p className="text-[11px] text-[#5a5a72] mt-0.5">{s.label}</p>
           </div>
         ))}
@@ -151,17 +156,17 @@ function FeaturesSection() {
   ]
 
   return (
-    <section className="py-24 px-6">
+    <section className="py-16 sm:py-24 px-4 sm:px-6">
       <div className="max-w-6xl mx-auto">
         <SectionHeader
           badge="Core Features"
           title="Every layer engineered for production"
           sub="Not a tutorial project. Each component is chosen for reliability, observability, and enterprise-grade safety."
         />
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-14">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 mt-12 sm:mt-14">
           {features.map((f) => (
             <div key={f.title}
-              className="group p-6 rounded-2xl border border-[#2a2a3a] bg-[#0d0d14]
+              className="group p-5 sm:p-6 rounded-2xl border border-[#2a2a3a] bg-[#0d0d14]
                 hover:border-indigo-500/30 hover:bg-[#111118] transition-all duration-200">
               <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-[#1a1a24] border border-[#2a2a3a] mb-4">
                 {f.icon}
@@ -218,19 +223,19 @@ function PipelineSection() {
   ]
 
   return (
-    <section className="py-24 px-6 bg-[#0d0d14] border-y border-[#2a2a3a]">
+    <section className="py-16 sm:py-24 px-4 sm:px-6 bg-[#0d0d14] border-y border-[#2a2a3a]">
       <div className="max-w-5xl mx-auto">
         <SectionHeader
           badge="Agent Pipeline"
           title="How a query flows through the system"
           sub="Five deterministic stages, each independently traceable via Logfire spans and LangSmith."
         />
-        <div className="mt-14 space-y-4">
+        <div className="mt-12 sm:mt-14 space-y-3 sm:space-y-4">
           {steps.map((s, i) => (
             <div key={s.num}
-              className={`flex items-start gap-5 p-5 rounded-2xl border transition-all duration-150 ${s.color}`}>
+              className={`flex items-start gap-4 p-4 sm:p-5 rounded-2xl border transition-all duration-150 ${s.color}`}>
               <div className="flex flex-col items-center gap-2 shrink-0">
-                <div className={`w-8 h-8 rounded-lg flex items-center justify-center bg-[#0d0d14] border border-[#2a2a3a]`}>
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-[#0d0d14] border border-[#2a2a3a]">
                   {s.icon}
                 </div>
                 {i < steps.length - 1 && (
@@ -270,14 +275,14 @@ function CapabilitiesSection() {
   ]
 
   return (
-    <section className="py-24 px-6">
+    <section className="py-16 sm:py-24 px-4 sm:px-6">
       <div className="max-w-5xl mx-auto">
         <SectionHeader
           badge="Capabilities"
           title="What this system can do"
           sub="Built beyond the tutorial — every feature has a production rationale."
         />
-        <div className="mt-14 grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="mt-12 sm:mt-14 grid grid-cols-1 sm:grid-cols-2 gap-3">
           {items.map((item) => (
             <div key={item} className="flex items-start gap-3 px-4 py-3 rounded-xl border border-[#2a2a3a] bg-[#0d0d14]">
               <CheckCircle size={14} className="text-indigo-400 shrink-0 mt-0.5" />
@@ -293,32 +298,32 @@ function CapabilitiesSection() {
 /* ─── CTA ───────────────────────────────────────────────────────────────── */
 function CTASection() {
   return (
-    <section className="py-24 px-6 border-t border-[#2a2a3a]">
+    <section className="py-16 sm:py-24 px-4 sm:px-6 border-t border-[#2a2a3a]">
       <div className="max-w-3xl mx-auto text-center">
         <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl
           bg-indigo-500/15 border border-indigo-500/25 mb-8">
           <Network size={24} className="text-indigo-400" />
         </div>
-        <h2 className="text-3xl font-bold text-[#f1f1f5] mb-4">See it running live</h2>
-        <p className="text-[#5a5a72] text-base leading-relaxed mb-10 max-w-lg mx-auto">
+        <h2 className="text-2xl sm:text-3xl font-bold text-[#f1f1f5] mb-4">See it running live</h2>
+        <p className="text-[#5a5a72] text-sm sm:text-base leading-relaxed mb-10 max-w-lg mx-auto">
           The full pipeline — guardrails, vector search, reranking, and LLM synthesis —
           is live. Ask it anything about Kubernetes, Intel hardware, or networking.
         </p>
-        <div className="flex items-center justify-center gap-4 flex-wrap">
+        <div className="flex items-center justify-center gap-3 flex-wrap">
           <Link
             to="/chat"
-            className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-500
-              text-white text-sm font-semibold transition-all duration-150 no-underline
-              shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/35"
+            className="inline-flex items-center gap-2 px-6 sm:px-7 py-3 sm:py-3.5 rounded-xl
+              bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold
+              transition-all duration-150 no-underline shadow-lg shadow-indigo-500/25"
           >
             Open Live Demo
             <ArrowRight size={15} />
           </Link>
           <Link
             to="/architecture"
-            className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl border border-[#2a2a3a]
-              hover:border-indigo-500/30 text-[#8b8ba7] hover:text-[#f1f1f5] text-sm font-medium
-              transition-all duration-150 no-underline"
+            className="inline-flex items-center gap-2 px-6 sm:px-7 py-3 sm:py-3.5 rounded-xl
+              border border-[#2a2a3a] hover:border-indigo-500/30 text-[#8b8ba7]
+              hover:text-[#f1f1f5] text-sm font-medium transition-all duration-150 no-underline"
           >
             Deep Dive
             <ChevronRight size={15} />
@@ -337,7 +342,7 @@ function SectionHeader({ badge, title, sub }: { badge: string; title: string; su
         text-indigo-300 text-[11px] font-mono uppercase tracking-wider mb-4">
         {badge}
       </span>
-      <h2 className="text-3xl font-bold text-[#f1f1f5] mb-3">{title}</h2>
+      <h2 className="text-2xl sm:text-3xl font-bold text-[#f1f1f5] mb-3">{title}</h2>
       <p className="text-[#5a5a72] text-sm max-w-xl mx-auto leading-relaxed">{sub}</p>
     </div>
   )

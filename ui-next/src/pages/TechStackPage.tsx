@@ -4,27 +4,27 @@ import { ArrowRight, ExternalLink } from 'lucide-react'
 export default function TechStackPage() {
   return (
     <main className="pt-14">
-      <div className="max-w-5xl mx-auto px-6 py-16">
-        <div className="mb-14">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+        <div className="mb-10 sm:mb-14">
           <span className="inline-block px-3 py-1 rounded-full border border-indigo-500/25 bg-indigo-500/10
             text-indigo-300 text-[11px] font-mono uppercase tracking-wider mb-4">
             Tech Stack
           </span>
-          <h1 className="text-4xl font-bold text-[#f1f1f5] mb-3">Every tool, and why</h1>
-          <p className="text-[#5a5a72] text-base leading-relaxed max-w-2xl">
+          <h1 className="text-3xl sm:text-4xl font-bold text-[#f1f1f5] mb-3">Every tool, and why</h1>
+          <p className="text-[#5a5a72] text-sm sm:text-base leading-relaxed max-w-2xl">
             Nothing picked arbitrarily. Each dependency solves a specific production problem —
             here's the reasoning behind the choices.
           </p>
         </div>
 
-        <div className="space-y-10">
+        <div className="space-y-8 sm:space-y-10">
           {CATEGORIES.map((cat) => (
             <div key={cat.label}>
               <div className="flex items-center gap-2 mb-4">
                 <span className={`w-2 h-2 rounded-full ${cat.dot}`} />
                 <h2 className="text-xs font-mono uppercase tracking-widest text-[#5a5a72]">{cat.label}</h2>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {cat.items.map((item) => (
                   <StackCard key={item.name} {...item} />
                 ))}
@@ -34,7 +34,7 @@ export default function TechStackPage() {
         </div>
 
         {/* Versions snapshot */}
-        <div className="mt-16 p-6 rounded-2xl border border-[#2a2a3a] bg-[#0d0d14]">
+        <div className="mt-12 sm:mt-16 p-4 sm:p-6 rounded-2xl border border-[#2a2a3a] bg-[#0d0d14]">
           <h3 className="text-sm font-semibold text-[#f1f1f5] mb-4 font-mono">Pinned versions (pyproject.toml)</h3>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
             {VERSIONS.map(([pkg, ver]) => (
@@ -46,7 +46,7 @@ export default function TechStackPage() {
           </div>
         </div>
 
-        <div className="flex justify-center mt-12">
+        <div className="flex justify-center mt-10 sm:mt-12">
           <Link to="/chat"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500
               text-white text-sm font-semibold transition-all duration-150 no-underline">
